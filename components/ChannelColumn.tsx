@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Channel } from '../types';
 import VideoCard from './VideoCard';
@@ -19,7 +18,7 @@ const ChannelColumn: React.FC<ChannelColumnProps> = ({ channel }) => {
         <h2 className="font-semibold text-gray-200 truncate">{channel.channelName}</h2>
       </div>
       <div className="p-2">
-        <VideoCard video={channel.latestVideo} />
+        <VideoCard video={channel.latestVideo} channelName={channel.channelName} />
       </div>
     </div>
   );
