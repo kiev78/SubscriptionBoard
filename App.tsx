@@ -21,7 +21,7 @@ import Login from './components/Login';
 //      or a specific URL provided by your development environment.
 // 5. Copy the "Client ID" that is generated and paste it below, replacing the placeholder.
 //    DO NOT use a Client Secret in this client-side application.
-const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const YOUTUBE_SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
 
 declare global {
@@ -39,8 +39,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleLogin = () => {
-    if (CLIENT_ID.startsWith('YOUR_GOOGLE_CLIENT_ID')) {
-      setError('Error: Google Client ID is not configured. Please follow the setup instructions in App.tsx.');
+if (!CLIENT_ID) {
       return;
     }
     if (tokenClient) {
@@ -96,7 +95,7 @@ const App: React.FC = () => {
       return;
     }
 
-    if (CLIENT_ID.startsWith('YOUR_GOOGLE_CLIENT_ID')) {
+    if (!CLIENT_ID) {
       setError('Please configure your Google Client ID in App.tsx to connect to YouTube.');
       setIsLoading(false);
       return;
