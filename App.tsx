@@ -5,14 +5,22 @@ import ChannelColumn from './components/ChannelColumn';
 import LoadingSpinner from './components/LoadingSpinner';
 import Login from './components/Login';
 
-// --- IMPORTANT ---
+// --- IMPORTANT SETUP ---
+// To fix the "unauthorized" error, you must configure your Google OAuth Client ID.
 // 1. Go to the Google Cloud Console: https://console.cloud.google.com/
-// 2. Create a new project.
-// 3. Go to "APIs & Services" -> "Credentials".
-// 4. Create an "OAuth client ID".
-// 5. Select "Web application" as the application type.
-// 6. Add your app's origin to "Authorized JavaScript origins".
-// 7. Copy the "Client ID" and paste it below.
+// 2. Create a new project or select an existing one.
+// 3. Enable the "YouTube Data API v3":
+//    - Go to "APIs & Services" -> "Library".
+//    - Search for "YouTube Data API v3" and click "Enable".
+// 4. Create OAuth credentials:
+//    - Go to "APIs & Services" -> "Credentials".
+//    - Click "Create Credentials" -> "OAuth client ID".
+//    - Select "Web application" as the application type.
+//    - Under "Authorized JavaScript origins", add the URL where your app is running.
+//      This is a critical step. For local development, it might be http://localhost:xxxx
+//      or a specific URL provided by your development environment.
+// 5. Copy the "Client ID" that is generated and paste it below, replacing the placeholder.
+//    DO NOT use a Client Secret in this client-side application.
 const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
 const YOUTUBE_SCOPE = 'https://www.googleapis.com/auth/youtube.readonly';
 
@@ -31,6 +39,10 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleLogin = () => {
+    if (CLIENT_ID.startsWith('YOUR_GOOGLE_CLIENT_ID')) {
+      setError('Error: Google Client ID is not configured. Please follow the setup instructions in App.tsx.');
+      return;
+    }
     if (tokenClient) {
       tokenClient.requestAccessToken();
     } else {
@@ -57,7 +69,7 @@ const App: React.FC = () => {
           scope: YOUTUBE_SCOPE,
           callback: (tokenResponse: any) => {
             if (tokenResponse.error) {
-              setError(`Google Auth Error: ${tokenResponse.error_description || tokenResponse.error}`);
+              setError(`Google Auth Error: ${tokenResponse.error_description || tokenResponse.error}. Please check your Client ID and Authorized Origins in the Google Cloud Console.`);
               return;
             }
             localStorage.setItem('yt-token', tokenResponse.access_token);
