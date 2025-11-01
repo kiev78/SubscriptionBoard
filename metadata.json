@@ -1,0 +1,5 @@
+{
+  "name": "SubscriptionBoard",
+  "description": "A web application that displays your YouTube subscriptions in a Trello-style layout using the YouTube Data API. Each channel is a list, and its latest video is a card, sorted by publication date.",
+  "requestFramePermissions": []
+}
